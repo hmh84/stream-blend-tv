@@ -1,0 +1,19 @@
+{
+	"version": "1.0.0",
+	"manifest_version": 3,
+	"name": "SteamBlend TV",
+	"description": "Turn your streaming services into live tv.",
+	"host_permissions": ["https://www.netflix.com/*"],
+	"icons": {
+		"16": "icon-16.png",
+		"48": "icon-48.png",
+		"128": "icon-128.png"
+	},
+	"content_security_policy": {
+		"extension_pages": "default-src 'self'"
+	},
+	"action": {
+		"default_popup": "js/index.html",
+		"default_title": "StreamBlend TV"
+	}
+}

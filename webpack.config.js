@@ -3,10 +3,12 @@ const HTMLPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
+    mode: "development",
+    devtool: "cheap-module-source-map",
     entry: {
-        index: "./src/index.tsx"
+        popup: path.resolve("./src/popup/index.tsx"),
+        tv: path.resolve("./src/index.tsx")
     },
-    mode: "production",
     module: {
         rules: [
             {
@@ -22,10 +24,11 @@ module.exports = {
             },
             {
                 exclude: /node_modules/,
-                test: /\.css$/i,
+                test: /\.(scss|css)$/i,
                 use: [
                     "style-loader",
-                    "css-loader"
+                    "css-loader",
+                    "sass-loader"
                 ]
             },
         ],
@@ -33,13 +36,22 @@ module.exports = {
     plugins: [
         new CopyPlugin({
             patterns: [
-                { from: "manifest.json", to: "../manifest.json" },
-                { from: "public/icon-16.png", to: "../icon-16.png" },
-                { from: "public/icon-48.png", to: "../icon-48.png" },
-                { from: "public/icon-128.png", to: "../icon-128.png" },
+                { from: "./src/manifest.json", to: "../manifest.json" },
+                { from: "./public/icon-16.png", to: "../icon-16.png" },
+                { from: "./public/icon-48.png", to: "../icon-48.png" },
+                { from: "./public/icon-128.png", to: "../icon-128.png" },
             ],
         }),
-        ...getHtmlPlugins(["index"]),
+        new HTMLPlugin({
+            title: "Popup",
+            filename: "popup.html",
+            chunks: ["popup"],
+        }),
+        new HTMLPlugin({
+            title: "TV",
+            filename: 'tv.html',
+            chunks: ["tv"],
+        })
     ],
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
@@ -49,14 +61,3 @@ module.exports = {
         filename: "[name].js",
     },
 };
-
-function getHtmlPlugins(chunks) {
-    return chunks.map(
-        (chunk) =>
-            new HTMLPlugin({
-                title: "React extension",
-                filename: `${chunk}.html`,
-                chunks: [chunk],
-            })
-    );
-}

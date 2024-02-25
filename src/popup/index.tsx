@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import Popup from './Popup';
 
-import './index.css';
+import '../index.css';
 
 const root = document.createElement('div');
 root.className = 'root';
@@ -11,6 +11,6 @@ const rootDiv = ReactDOM.createRoot(root);
 
 rootDiv.render(
 	<React.StrictMode>
-		<App />
+		<Popup />
 	</React.StrictMode>
 );

@@ -9,11 +9,9 @@
 		"48": "icon-48.png",
 		"128": "icon-128.png"
 	},
-	"content_security_policy": {
-		"extension_pages": "default-src 'self'"
-	},
 	"action": {
-		"default_popup": "js/index.html",
+		"default_popup": "js/popup.html",
 		"default_title": "StreamBlend TV"
-	}
+	},
+	"permissions": ["tabs", "scripting", "storage"]
 }

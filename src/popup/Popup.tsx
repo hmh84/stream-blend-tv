@@ -1,8 +1,9 @@
 import { Box, Button, Typography } from '@mui/material';
 
 import { appName, netflixGenres, netflixBaseUrl } from '../data/data';
+import initApp from '../index';
 
-export default function Popup() {
+function Popup() {
 	const onGenreClick = (genreId: number) => {
 		chrome.tabs.query(
 			{ currentWindow: true, url: `${netflixBaseUrl}/*` },
@@ -95,3 +96,5 @@ export default function Popup() {
 		</Box>
 	);
 }
+
+initApp(Popup);

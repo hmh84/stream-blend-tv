@@ -1,8 +1,9 @@
 import { Box, Typography } from '@mui/material';
 
 import { appName } from '../data/data';
+import initApp from '../index';
 
-export default function Player() {
+function Player() {
 	return (
 		<Box sx={{ p: 1 }}>
 			<Typography variant='h3' component='h1'>
@@ -11,3 +12,5 @@ export default function Player() {
 		</Box>
 	);
 }
+
+initApp(Player);

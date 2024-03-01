@@ -6,8 +6,8 @@ module.exports = {
     mode: "development",
     devtool: "cheap-module-source-map",
     entry: {
-        popup: path.resolve("./src/popup/index.tsx"),
-        player: path.resolve("./src/player/index.tsx"),
+        popup: path.resolve("./src/popup/Popup.tsx"),
+        player: path.resolve("./src/player/Player.tsx"),
     },
     module: {
         rules: [

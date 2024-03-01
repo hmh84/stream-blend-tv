@@ -9,7 +9,7 @@ export default function Popup() {
 			async (tabs) => {
 				if (!tabs) {
 					console.error(
-						'Failed to get tabs from "chrome.tabs.query"'
+						'Failed to get tabs from "chrome.tabs.query"',
 					);
 					return;
 				}
@@ -40,7 +40,7 @@ export default function Popup() {
 					func: () => {
 						const watchableAnchors =
 							document.querySelectorAll<HTMLAnchorElement>(
-								'a[href^="/watch/"]'
+								'a[href^="/watch/"]',
 							);
 
 						if (watchableAnchors.length === 0) {
@@ -52,18 +52,18 @@ export default function Popup() {
 							(item) => ({
 								title: item.title,
 								href: item.href,
-							})
+							}),
 						);
 
 						chrome.storage.session.set({ watchableItems: data });
 					},
 				});
-			}
+			},
 		);
 	};
 
 	return (
-		<Box className='App' sx={{ p: 1 }}>
+		<Box sx={{ p: 1 }}>
 			<Typography variant='h3' component='h1'>
 				{appName}
 			</Typography>

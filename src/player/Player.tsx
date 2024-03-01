@@ -1,12 +1,12 @@
 import { Box, Typography } from '@mui/material';
 
-import { appName } from './data/data';
+import { appName } from '../data/data';
 
-export default function App() {
+export default function Player() {
 	return (
-		<Box className='App' sx={{ p: 1 }}>
+		<Box sx={{ p: 1 }}>
 			<Typography variant='h3' component='h1'>
-				{appName} - TV Mode
+				{appName} - Player
 			</Typography>
 		</Box>
 	);

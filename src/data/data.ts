@@ -22,5 +22,5 @@ export const netflixGenres: Genre[] = [
 	{
 		id: 89814,
 		name: 'Award-Winning TV Shows',
-	}
+	},
 ];

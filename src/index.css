@@ -6,10 +6,28 @@ html * {
 }
 
 html {
+	display: flex;
+	width: 100vw;
+}
+
+html:not(.popup) {
+	min-height: 100vh;
+}
+
+html.popup {
 	width: 600px;
 	height: 350px;
 }
 
 body {
 	margin: 0;
+	display: flex;
+	width: 100%;
+	min-height: 100%;
+}
+
+.root {
+	display: flex;
+	width: 100%;
+	min-height: 100%;
 }

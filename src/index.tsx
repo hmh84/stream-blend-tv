@@ -3,12 +3,13 @@ import { createRoot } from 'react-dom/client';
 
 import './index.css';
 
-const container = document.createElement('div');
-container.classList.add('root');
-document.body.appendChild(container);
-const root = createRoot(container);
+export default function initApp(App: FC, isPopup = false) {
+	const container = document.createElement('div');
+	container.classList.add('root');
+	isPopup && document.querySelector('html')?.classList.add('popup');
+	document.body.appendChild(container);
+	const root = createRoot(container);
 
-export default function initApp(App: FC) {
 	root.render(
 		<StrictMode>
 			<App />

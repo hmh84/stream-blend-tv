@@ -13,5 +13,15 @@
 		"default_popup": "./popup.html",
 		"default_title": "StreamBlend TV"
 	},
-	"permissions": ["tabs", "scripting", "storage"]
+	"permissions": ["tabs", "scripting", "storage"],
+	"options_page": "options.html",
+	"background": {
+		"service_worker": "./background.js"
+	},
+	"content_scripts": [
+		{
+			"matches": ["https://www.netflix.com/*"],
+			"js": ["./content.js"]
+		}
+	]
 }

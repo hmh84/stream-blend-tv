@@ -1,100 +1,103 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, IconButton, Typography } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
+import CloseIcon from '@mui/icons-material/Close';
 
-import { appName, netflixGenres, netflixBaseUrl } from '../data/data';
+import {
+	appName,
+	streamingServices,
+	StreamingService,
+	StreamingGenre,
+	startPlayer,
+	StyleObj,
+} from '../data/data';
 import initApp from '../index';
+import Cell from './components/Cell';
+import FeatureLayout from '../components/FeatureLayout';
 
-function Popup() {
-	const onGenreClick = (genreId: number) => {
-		chrome.tabs.query(
-			{ currentWindow: true, url: `${netflixBaseUrl}/*` },
-			async (tabs) => {
-				if (!tabs) {
-					console.error(
-						'Failed to get tabs from "chrome.tabs.query"',
-					);
-					return;
-				}
+const onOpenSettings = async () => {
+	await chrome.runtime.openOptionsPage();
+};
 
-				const url = `${netflixBaseUrl}/browse/m/genre/${genreId}/`;
-				let tab: chrome.tabs.Tab | undefined = undefined;
-
-				if (tabs.length > 0) {
-					const lastTab = tabs[tabs.length - 1];
-					tab = await chrome.tabs.update(lastTab.id as number, {
-						url,
-					});
-				} else {
-					tab = await chrome.tabs.create({ url });
-				}
-
-				if (!tab) {
-					console.error('Failed to create or update tab');
-					return;
-				}
-
-				await chrome.windows.update(tab.windowId as number, {
-					focused: true,
-				});
-
-				await chrome.scripting.executeScript({
-					target: { tabId: tab.id as number },
-					func: () => {
-						const watchableAnchors =
-							document.querySelectorAll<HTMLAnchorElement>(
-								'a[href^="/watch/"]',
-							);
-
-						if (watchableAnchors.length === 0) {
-							console.error('No watchable items found');
-							return;
-						}
-
-						const data = Array.from(watchableAnchors).map(
-							(item) => ({
-								title: item.title,
-								href: item.href,
-							}),
-						);
-
-						chrome.storage.session.set({ watchableItems: data });
-					},
-				});
-			},
-		);
+const Popup = () => {
+	const onGenreClick = async (
+		service: StreamingService,
+		genre: StreamingGenre,
+	) => {
+		await startPlayer(service, genre);
 	};
 
 	return (
-		<Box sx={{ p: 1 }}>
-			<Typography variant='h3' component='h1'>
-				{appName}
-			</Typography>
-			<Box
-				sx={{
-					display: 'flex',
-					flexDirection: 'row',
-					flexWrap: 'wrap',
-					gap: 1,
-				}}
-			>
-				{netflixGenres.map(({ id, name }, index) => (
-					<Button
-						key={`genre-btn-${index}-${id}`}
-						variant='contained'
-						onClick={() => onGenreClick(id)}
-						sx={{
-							'bgcolor': 'transparent',
-							'color': '#000',
-							':hover': {
-								color: '#fff',
-							},
-						}}
+		<FeatureLayout title='Popup'>
+			<Box sx={styles.header}>
+				<Typography variant='h4' component='h1'>
+					{appName}
+				</Typography>
+				<Box>
+					<IconButton aria-label='Close' onClick={onOpenSettings}>
+						<SettingsIcon sx={{ color: '#fff' }} />
+					</IconButton>
+					<IconButton
+						aria-label='Close'
+						onClick={() => window.close()}
 					>
-						{name}
-					</Button>
+						<CloseIcon sx={{ color: '#fff' }} />
+					</IconButton>
+				</Box>
+			</Box>
+			<Box sx={styles.genresContainer}>
+				{streamingServices.map((service, serviceIndex) => (
+					<Box
+						key={`service-${serviceIndex}-${service.id}`}
+						sx={styles.serviceRow}
+					>
+						<Cell sx={styles.serviceNameCell}>
+							<Typography variant='h4' component='h2'>
+								{service.name}
+							</Typography>
+						</Cell>
+						{service.genres.map((genre, genreIndex) => (
+							<Cell>
+								<Button
+									key={`genre-btn-${genreIndex}-${genre.id}`}
+									variant='text'
+									onClick={() => onGenreClick(service, genre)}
+									sx={styles.genreButton}
+								>
+									{genre.name}
+								</Button>
+							</Cell>
+						))}
+					</Box>
 				))}
 			</Box>
-		</Box>
+		</FeatureLayout>
 	);
-}
+};
 
-initApp(Popup);
+initApp(Popup, true);
+
+const styles: StyleObj = {
+	header: {
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+	},
+	genresContainer: {
+		display: 'flex',
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		gap: 1,
+	},
+	serviceRow: {
+		display: 'flex',
+		flexDirection: 'row',
+	},
+	serviceNameCell: {
+		width: 125,
+	},
+	genreButton: {
+		width: 'max-content',
+		height: 'max-content',
+	},
+};

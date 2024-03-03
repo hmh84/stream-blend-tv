@@ -3,11 +3,11 @@ const HTMLPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-    mode: "development",
-    devtool: "cheap-module-source-map",
     entry: {
         popup: path.resolve("./src/popup/Popup.tsx"),
-        player: path.resolve("./src/player/Player.tsx"),
+        options: path.resolve("./src/options/Options.tsx"),
+        background: path.resolve("./src/background/background.ts"),
+        content: path.resolve("./src/content/content.ts"),
     },
     module: {
         rules: [
@@ -46,9 +46,9 @@ module.exports = {
             chunks: ["popup"],
         }),
         new HTMLPlugin({
-            title: "Player",
-            filename: 'player.html',
-            chunks: ["player"],
+            title: "Options",
+            filename: "options.html",
+            chunks: ["options"],
         }),
     ],
     optimization: {
